@@ -30,6 +30,8 @@ io.on('connection', (socket) => {
   socket.on('updateNumber', (data) => {
     currentNumber += data;
     console.log(currentNumber);
+    
+    if(currentNumber>10000) currentNumber = 0;
     io.sockets.in('room1').emit('updated', currentNumber);
   });
 
