@@ -1,13 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="https://npmcdn.com/babel-core@5.8.38/browser.min.js"></script>
     <script type="text/babel" >
-        "use strict";
-    
+      "use strict";
+        
+      let socket;
+      let totalScore;
+      
+      const addNum = () => {
+        socket.emit('updateNumber', 10);
+      };
+      
+      //send
+      const update = (data) => {
+        totalScore.innerText = data;
+      };
+      
+      const init = () => {
+        totalScore = document.querySelector("#totalScore");
+        totalScore.innerText = "0"; //default text
+        
+        socket = io.connect();
+        
+        socket.on('connect', ()=> {
+          setInterval(addNum, 1200); //generate score per time (1.2 s)
+        });
+        
+        socket.on('updated', update);
+      };
+     
+      window.onload = init;
     </script>
 </head>
 <body>
-
+  <h2>Current number is: <span id="totalScore"></span></h2>
 </body>
 </html>
